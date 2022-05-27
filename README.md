@@ -86,7 +86,7 @@ Git es un software de control de versiones de código de forma distribuida que e
 
 * **diff** : Se utiliza para mostrar los cambios entre dos versiones del mismo archivo.
 
-## Comandos básicos
+# Comandos básicos
 
 - El comando para iniciar nuestro repositorio o indicarle a Git que queremos usar su **sistema de control de versiones** en nuestro proyecto es:
 
@@ -111,7 +111,7 @@ Tambien podemmos guardar un mensaje para recordar muy bien que cambios hicimos e
 - Por ultimo, si queremos mandar nuestros commits a un servidor remoto, un lugar donde todos podamos conectar nuestros proyctos, usamos el comando
   > `git push`
 
-## Lista de comandos básicos de Git
+# Lista de comandos básicos de Git
 
 `git init` :Inicializa un repositorio de **Git** en la carpeta donde se ejecute el comando.
 
