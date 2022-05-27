@@ -138,6 +138,8 @@ configura un nombre
 
 `git log --stat` : además de listar los commits, muestra la cantidad de **bytes** añadidos y eliminados en cada uno de los archivos modificados.
 
+![git log --stat](./imagenes/git_log_stat.png)
+
 `git log --all --graph --decorate --oneline` : Muestra de manera comprimida toda la historia del repositorio de manera gráfica y embellecida.
 
 `git show <filename>` : Permite ver la historia de los cambios en un archivo.
