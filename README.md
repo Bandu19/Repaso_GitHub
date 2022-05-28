@@ -173,3 +173,202 @@ Con `git reset` volvemos al pasado sin la posibilidad de volver al futuro. Borra
 - `git reset --soft` : Vuelve el branch al estado del **commit** especificado, manteniendo los archivos en el directorio de trabajo y lo que haya en _staging_ considerando todo como nuevos cambios. Asi podemos aplicar las últimas actualizaciones a un nuevo **commit**.
 - `git reset --hard` : Borra absolutamente todo. Toda la información de los commits y del area de _staging_ se borra el historial.
 - `git reset HEAD` : No borra los archivos ni sus modificaciones, solo los saca del area de _staging_, de forma que los ultimos cambios de estos archivos no se envíen al ultimo **commit**. Si se cambia de opinión se los puede incluir nuevamente con `git add` .
+
+
+
+## Ramas o Branches de Git
+
+Al crear una nueva rama se copia el último **commit** en esta nueva rama. Todos los cambios hechos en esta rama no se reflejarán en la rama master, hasta que hagamos un **merge**.
+* `git branch <newbranch>` : Crea una nueva rama.
+* `git checkout <branch_name>`: Se mueve a la rama específicada
+* `git merge <branch_name>` : Fusiona la rama actual con la rama especificada y produce un nuevo **commit** de esta fusión 
+* `git branch` : lista las ramas generadas
+
+
+# Los tres estados 
+
+Un asunto importante a recordard acerca de **Git**, es de que **Git** tiene tres estados principales en el cual tus archivos pueden residir: **modiffied**, **staged**, y **committed**:
+
+- **Modiffied**: Significa que el archivo lo has modificado perono se le ha hecho **commited** aún en la base de datos.
+
+- **Staged**: Significa que se ha marcado un archivo modificado en su version actual para ir al próximo **commit**.
+
+- **Commited**: significa que los datos estan almacenados de forma segura en la base de datos local.
+
+
+![](https://git-scm.com/book/en/v2/images/areas.png)
+
+## Working tree, Staging area Git directory
+
+**Working tree**: Es una sola verificacion de la version del proyecto. Estos archivos son jalados(*pulled*) fuera de la base de datos comprimida en el repositorio de *Git* y colocado en el disco para ser utilizados o ser modificados.
+
+**Staging area**: Es un archivo, por lo general contenido en tu repositorio Git, el cual almacena la información que va a ir a tu próximo **commit**. Su nombre técnico es "*index*".
+
+**Git directory(repository)**: es donde **Git** guarda los metadatos y objetos de la base de datos para tu proyecto. Esta es la parte mas importante de **Git**, y también es lo que es copiado cuando clonas(*clone*) un repositorio de otra computadora.
+
+El flujo de trabajo de Git por lo general es asi:
+
+1. Modificas los archivos de tu árbol de trabajo(*working tree*).
+
+2. Seleccionas aquellos cambios que queres que sean parte de tu próximo **commit**, el cual agrega solo aquellos cambios al **staging area**.
+
+3. Haces un **commit**, que toma los archivos así como estan en el *staging area* y almacena esa snapshot permanentemente  al tu repositorio de git ("*git repository*"). 
+
+
+
+# Flujo de trabajo básico en un repositorio
+
+Por lo genenral, cuando se empieza a trabajar en un entorno localm el proyecto vive ínicamente en tu computadora. Esto significa que no hay forma de que otros miembros del equipo trabajen en él.
+
+Para solucionar esto, utilizamos los **servidores remotos**: Un nuevo estado que dben seguir nuestros archivos para conectarse y trabajar con equipos de cualquier parte del mundo.
+
+Estos servidores remotos pueden estar alojados en **GitHub**, **GitLab**, **BitBucket**, entre otros. Lo que estos servidores hacen es guardar el mismo repositorio que está en nuestra computadora y darnos una **URL** con la que todos podremos acceder a los archivos del proyecto. Así de esta forma el equipo podrá descargarlo, hacer cambios y volverlos a enviar al servidor remoto para que otras personas vean los cambios, comparen sus versiones y creen nuevas propuestas para el proyecto.
+
+## Comandos para trabajo remoto con GIT.
+![](./img/remote.png)
+
+``` bash
+git clone [url]
+```
+Cuando queremos traer datos de un servidor remoto y empezar a contribuir en el, lo que se requiere es clonar los datos que contiene del servidor- El comando que se necesita es: 
+
+![clone](./img/git-clone.png)
+
+En este caso, cada versión de cada archivo de la historia es descargada por defecto cuando se ejecuta el comando.
+
+
+
+``` bash
+git push 
+```
+luego que un **commit** se ha realizado, se debe de ejecutar este comando para mandar los cambios al servidor remoto.
+
+![push](./img/git-push.png)
+
+``` bash
+git fetch 
+```
+![fetch](./img/fetch.png)
+
+Se usa para traer actualizaciones del servidor remoto y guardarlas en nuestro repositorio local. Pero este no modifica a los archivos los archivo de nuestro directorio de trabajo, simplemente actualiza las referencias de tu remoto. 
+
+Para lograr fusionar las actualizaciones del repositorio remoto con nuestro directorio local se utiliza un `git merge`.
+![merge](./img/fetch-merge.png)
+``` bash
+git merge
+```
+Existe un comando llamado `git pull`, el cual lo que hace es `git fetch` seguido por `git merge` en la mayoria de los casos.
+
+![pull](./img/pull.png)
+
+
+
+# Ramas o branches de Git
+
+![branches](./img/branches.png)
+
+Las ramas son la forma de hacer cambios en nuestro proyecto sin afectar el flojo de trabajo de la rama principal. Esto porque queremos trabajar una parte muy específica de la aplicación o simplemente experimentar.
+
+La cabecera o `HEAD` representa la rama y el commit de esa rama donde estamos trabajando. Por defecto, esta cabecera aparecerá en el último commit de nuestra rama principal. Pero podemos cambiarlo al crear una rama.
+
+```bash
+git branch <branch-name>
+git checkout -b <branch-name>
+```
+o movernos en el timepo a cualquier otro commit de cualquier otra rama con los comandos:
+
+``` bash
+git reset <id-commit>
+git checkout <rama o id-commit>
+```
+
+## IMPORTANTE
+Cuando se quiere hacer un merge, la fusion siempre ocurre desde la rama acutal, para ello debes asegurarte de lo siguiente:  
+* primero cual será la rama de recepción del merge y luego ubicarte en ella (`checkout`). 
+
+* También debes asegurarte de que la rama de recepción y de fusión esten actualizadas con los cambios mas recientes. 
+
+* Una vez adoptados estos pasos se puede ejecutar la fusión de las ramas con el comando 
+```bash
+git merge <Branch-Name>
+```
+
+
+# Resolución de conflictos al hacer merge
+
+hay que recordar que **git** nunca borra nada, a menos que nosotros se lo indiquemos. Cuando se usan los comandos `git merge` o `git checkout` estamos cambiando de rama o creando un nuevo commit, no borrando ramas ni commits 
+Para borrar commits es:
+
+`
+git reset --soft/hard <id-commit>
+`
+
+y para las ramas es:
+
+`git branch -d <branch-name>`
+
+Un **conflicto** ocurre cuando dos ramas diferentes hacen cambios distintos a una misma linea. Lo que toca hacer es resolverlo manualmente. Solo se debe hacer el *merge*, e ir a nuestro editor de código y decidir con cual versión deseamos quedarnos.
+
+Siempre debemos de recordar crear un nuevo commit para aplicar los cambios del *merge*. A veces **git** hace commit automaticamente, pero en otros casos no ocurre lo mismo y debemos de solucionarlo haciendo el *commit*.
+
+## Revertir un merge
+
+```bash
+git merge --abort
+```
+
+# GitHub
+
+## Conectar un repositorio de GitHub a nuestro documento local
+
+Si queremos conectar el repositorio de GitHub con nuestro repositorio local, que ha sido creado con el `git init`, debemos de ejecutar las siguientes instrucciones.
+
+
+* se guarda la URL del repositorio de *GitHub* con el nombre de "*origin*"
+
+```bash
+git remote add origin [URL]
+
+```
+
+* verificamos que la URL se haya guardado correctamente.
+```bash
+git remote
+git remote -v
+```
+
+* Nos traemos la versión del repositorio remoto y hacer un **merge** para crear un **commit** con los archivos de ambas partes.
+
+```bash
+git fetch <repository>
+git merge <origin>
+```
+o simnplemente hacemos *pull*
+```bash
+git pull origin master --allow-unrelated-hisotries
+```
+*"--allow-unrelated-hisotries"* es un tag que se utiliza en caso de que ya existan archivos o cambios en el repositorio al que se le quiere hacer *pull*.
+
+- para guardar los cambios de nuestro repositorio local a GitHub procedemos a hacer un *push*
+```bash
+git push origin master 
+```
+# Generar llaves SSH en local
+
+
+1. **Generar la llave SSH**
+Se recomienda agregar una contraseña a la llave privada para protegerla.
+
+```bash
+ssh-keygen -t rsa -b 4096 -C "Myemail@email.com"
+```
+2. Terminar de configurar el entorno
+- se procede a encender el "servidor" de llaves SSH de tu computadora.
+
+```
+eval $(ssh-agent -s)
+```
+- añadir la llave SSH al servidor
+```
+ssh-add </la-ruta-donde-la-llave-esta-alojada>
+```
